@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">TcpClient</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+
+    
+      <string name="pref_HomeIp">Set Home IP</string >
+    <string name="pref_HomeIp_summary">Set Home Port</string>
+</resources>

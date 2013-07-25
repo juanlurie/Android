@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+ 
+    <PreferenceCategory android:title="@string/pref_home_profile" >
+        <EditTextPreference
+                android:title="@string/pref_HomeIp"
+                android:summary="@string/pref_HomeIp_summary"
+                android:key="prefHomeIp"/>
+    </PreferenceCategory>
+    
+    <PreferenceCategory android:title="@string/pref_arduino_profile" >
+        <EditTextPreference
+                android:title="@string/pref_arduinoIp"
+                android:summary="@string/pref_arduinoIp_summary"
+                android:key="prefArduinoIp"/>
+    </PreferenceCategory>
+ 
+</PreferenceScreen>
