@@ -10,37 +10,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity" >
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="shutdownClick"
-            android:text="Shutdown"
-            android:textColor="#FFFFFF" />
-
-        <EditText
-            android:id="@+id/timerValue"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="Timer Value"
-            android:inputType="number"
-            android:textColor="#FFFFFF" />
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/button2"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="abortClick"
-        android:text="Abort"
-        android:textColor="#FFFFFF" />
-
     <Button
         android:id="@+id/button3"
         style="?android:attr/buttonStyleSmall"
@@ -67,5 +36,24 @@
         android:onClick="arduinoClick"
         android:text="Arduino"
         android:textColor="#FFFFFF" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <ToggleButton
+            android:id="@+id/switch1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Shutdown"
+            android:textOff="Shutdown"
+            android:textOn="Abort" />
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+    </LinearLayout>
 
 </LinearLayout>
