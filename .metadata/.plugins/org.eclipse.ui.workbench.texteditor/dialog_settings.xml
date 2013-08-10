@@ -13,16 +13,16 @@
 		<item value="false" key="isRegEx"/>
 		<item value="false" key="incremental"/>
 		<item value="false" key="wholeword"/>
-		<item value="hour" key="selection"/>
+		<item value="" key="selection"/>
 		<list key="findhistory">
+			<item value="plexConnectClick"/>
+			<item value="timePickerListener"/>
 			<item value="hour"/>
 			<item value="showdia"/>
 			<item value="settings"/>
 			<item value="selectItem"/>
 			<item value="selectitem"/>
 			<item value="select"/>
-			<item value="AppPreferences"/>
-			<item value="wrap_parent"/>
 		</list>
 		<list key="replacehistory">
 		</list>

@@ -58,6 +58,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -67,7 +68,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements Button.OnClickListener {
 	public static final String PREFS_NAME = "MySettings";
 
 	private DrawerLayout mDrawerLayout;
@@ -83,42 +84,29 @@ public class MainActivity extends Activity {
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		mDrawerList = (ListView) findViewById(R.id.left_drawer);
 		mMenuItems = getResources().getStringArray(R.array.environment_array);
-		// set a custom shadow that overlays the main content when the drawer
-		// opens
-		// mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow,
-		// GravityCompat.START);
-		// set up the drawer's list view with items and click listener
-		// mDrawerList.setAdapter(new ArrayAdapter<String>(this,
-		// R.layout.drawer_list_item, mPlanetTitles));
+
 		mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 		mDrawerList.setAdapter(new ArrayAdapter<String>(this,
 				R.layout.drawer_list_item, mMenuItems));
-		// enable ActionBar app icon to behave as action to toggle nav drawer
+
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setHomeButtonEnabled(true);
 
-		// ActionBarDrawerToggle ties together the the proper interactions
-		// between the sliding drawer and the action bar app icon
-		mDrawerToggle = new ActionBarDrawerToggle(this, /* host Activity */
-		mDrawerLayout, /* DrawerLayout object */
-		R.drawable.ic_drawer, /* nav drawer image to replace 'Up' caret */
-		R.string.drawer_open, /* "open drawer" description for accessibility */
-		R.string.drawer_close /* "close drawer" description for accessibility */
-		) {
+		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
+				R.drawable.ic_drawer, R.string.drawer_open,
+				R.string.drawer_close) {
 			public void onDrawerClosed(View view) {
-				getActionBar().setTitle("Hello");
-				invalidateOptionsMenu(); // creates call to
-											// onPrepareOptionsMenu()
+				invalidateOptionsMenu();
 			}
 
 			public void onDrawerOpened(View drawerView) {
-				getActionBar().setTitle("Hello");
-				invalidateOptionsMenu(); // creates call to
-											// onPrepareOptionsMenu()
+				invalidateOptionsMenu();
 			}
 		};
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
 
+		Button refreshBtn = (Button) this.findViewById(R.id.refreshDashboard);
+		refreshBtn.setOnClickListener(this);
 	}
 
 	@Override
@@ -128,11 +116,9 @@ public class MainActivity extends Activity {
 		return super.onCreateOptionsMenu(menu);
 	}
 
-	/* Called whenever we call invalidateOptionsMenu() */
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
-		// If the nav drawer is open, hide action items related to the content
-		// view
+
 		boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
 
 		return super.onPrepareOptionsMenu(menu);
@@ -140,8 +126,7 @@ public class MainActivity extends Activity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// The action bar home/up action should open or close the drawer.
-		// ActionBarDrawerToggle will take care of this.
+
 		if (mDrawerToggle.onOptionsItemSelected(item)) {
 			return true;
 		}
@@ -149,7 +134,6 @@ public class MainActivity extends Activity {
 
 	}
 
-	/* The click listner for ListView in the navigation drawer */
 	public class DrawerItemClickListener implements
 			ListView.OnItemClickListener {
 		@Override
@@ -160,7 +144,7 @@ public class MainActivity extends Activity {
 	}
 
 	private void selectItem(int position) {
-		// update the main content by replacing fragments
+
 		Bundle args = new Bundle();
 		switch (position) {
 		case 0:
@@ -261,6 +245,28 @@ public class MainActivity extends Activity {
 			return runCommand(params[0]);
 
 		}
+	}
+
+	public void SendJson(CommandTypes CommandType, String Parameter) {
+		TcpHelper tcpHelper = new TcpHelper();
+		TransferData transferData = new TransferData();
+		transferData.CommandType = CommandType.index();
+		transferData.Parameter = Parameter;
+		tcpHelper.Run(transferData.ToJson(), this);
+	}
+
+	public void nextShutdown() {
+		SendJson(CommandTypes.ShutdownSchedule, "");
+	}
+
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.refreshDashboard:
+			nextShutdown();
+			break;
+		}
+
 	}
 
 }

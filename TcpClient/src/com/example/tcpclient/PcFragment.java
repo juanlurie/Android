@@ -7,16 +7,19 @@ import org.json.JSONObject;
 
 import android.app.Fragment;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.TimePicker;
 import android.widget.ToggleButton;
 
 public class PcFragment extends Fragment implements
-		CompoundButton.OnCheckedChangeListener {
+		CompoundButton.OnCheckedChangeListener, Button.OnClickListener {
 	public static final String ARG_PLANET_NUMBER = "planet_number";
 
 	public PcFragment() {
@@ -26,8 +29,7 @@ public class PcFragment extends Fragment implements
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View rootView = inflater.inflate(R.layout.fragment_planet, container,
-				false);
+		View rootView = inflater.inflate(R.layout.pcfragment, container, false);
 		int i = getArguments().getInt(ARG_PLANET_NUMBER);
 		String title = getResources().getStringArray(R.array.environment_array)[i];
 
@@ -35,6 +37,12 @@ public class PcFragment extends Fragment implements
 		if (s != null) {
 			s.setOnCheckedChangeListener(this);
 		}
+
+		Button plexConnectBtn = (Button) rootView
+				.findViewById(R.id.plexConnectButton);
+		plexConnectBtn.setOnClickListener(this);
+		Button plexBtn = (Button) rootView.findViewById(R.id.plexButton);
+		plexBtn.setOnClickListener(this);
 
 		getActivity().setTitle("New Activity");
 		return rootView;
@@ -72,7 +80,7 @@ public class PcFragment extends Fragment implements
 
 			}
 
-			SendJson("2", newCalendar.getTime().toLocaleString());
+			SendJson(CommandTypes.Shutdown, newCalendar.getTime().toLocaleString());
 		}
 	};
 
@@ -91,26 +99,39 @@ public class PcFragment extends Fragment implements
 	}
 
 	public void abort() {
-		SendJson("3", "");
+		SendJson(CommandTypes.Abort, "");
 	}
 
-	public void plexConnectClick(View view) {
-		SendJson("4", "");
+	public void plexConnectClick() {
+		SendJson(CommandTypes.PlexConnect, "");
 	}
 
-	public void plexClick(View view) {
-		SendJson("1", "");
+	public void plexClick() {
+		SendJson(CommandTypes.Plex, "");
 	}
 
-	public void SendJson(String CommandType, String Parameter) {
+	public void SendJson(CommandTypes CommandType, String Parameter) {
 		TcpHelper tcpHelper = new TcpHelper();
-		String myString = new JSONObject().put("CommandType", CommandType)
-				.put("Parameter", Parameter).toString();
-		tcpHelper.Run(myString, getActivity());
+		TransferData transferData = new TransferData();
+		transferData.CommandType = CommandType.index();
+		transferData.Parameter = Parameter;
+		tcpHelper.Run(transferData.ToJson(), getActivity());
 	}
 
 	public void nextShutdown() {
-		SendJson("5", "");
+		SendJson(CommandTypes.ShutdownSchedule, "");
 	}
 
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.plexConnectButton:
+			plexConnectClick();
+			break;
+		case R.id.plexButton:
+			plexClick();
+			break;
+
+		}
+	}
 }

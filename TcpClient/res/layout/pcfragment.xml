@@ -12,7 +12,7 @@
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   See the License for the specific language governing permissions and
   limitations under the License.
-  -->
+-->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -27,30 +27,19 @@
     tools:context=".MainActivity" >
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/plexConnectButton"
         style="?android:attr/buttonStyleSmall"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="plexConnectClick"
         android:text="Plex Connect"
         android:textColor="#FFFFFF" />
 
     <Button
-        android:id="@+id/button4"
+        android:id="@+id/plexButton"
         style="?android:attr/buttonStyleSmall"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="plexClick"
         android:text="Plex"
-        android:textColor="#FFFFFF" />
-
-    <Button
-        android:id="@+id/button5"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="arduinoClick"
-        android:text="Arduino"
         android:textColor="#FFFFFF" />
 
     <LinearLayout
