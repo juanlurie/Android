@@ -1,28 +1,18 @@
 package com.example.tcpclient;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.InputStreamReader;
-import java.net.Socket;
 import java.util.Calendar;
 import java.util.Date;
 
 import org.json.JSONObject;
 
-import android.app.Activity;
-import android.app.Dialog;
 import android.app.Fragment;
 import android.app.TimePickerDialog;
-import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.TimePicker;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 public class PcFragment extends Fragment implements
@@ -116,54 +106,11 @@ public class PcFragment extends Fragment implements
 		TcpHelper tcpHelper = new TcpHelper();
 		String myString = new JSONObject().put("CommandType", CommandType)
 				.put("Parameter", Parameter).toString();
-		tcpHelper.execute(myString);
+		tcpHelper.Run(myString, getActivity());
 	}
 
 	public void nextShutdown() {
 		SendJson("5", "");
-	}
-
-	public class TcpHelper extends AsyncTask<Object, Object, String> {
-
-		private String runCommand(Object command) {
-
-			try {
-				String sentence;
-				String modifiedSentence = "";
-
-				SharedPreferences settings = PreferenceManager
-						.getDefaultSharedPreferences(getActivity());
-
-				String arduinoIp = settings.getString("prefHomeIp",
-						"192.168.1.177");
-				String arduinoPort = settings.getString("prefHomePort", "23");
-
-				Socket clientSocket = new Socket(arduinoIp,
-						Integer.parseInt(arduinoPort));
-				DataOutputStream outToServer = new DataOutputStream(
-						clientSocket.getOutputStream());
-				BufferedReader inFromServer = new BufferedReader(
-						new InputStreamReader(clientSocket.getInputStream()));
-				sentence = command.toString();
-				outToServer.writeBytes(sentence);
-				modifiedSentence = inFromServer.readLine();
-
-				clientSocket.close();
-				return modifiedSentence;
-			} catch (Exception ex) {
-				return "Error";
-			}
-
-		}
-
-		protected void onPostExecute(String result) {
-			Toast.makeText(getActivity(), result, Toast.LENGTH_SHORT).show();
-		}
-
-		protected String doInBackground(Object... params) {
-			return runCommand(params[0]);
-
-		}
 	}
 
 }
