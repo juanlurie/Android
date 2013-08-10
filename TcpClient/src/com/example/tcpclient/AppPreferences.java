@@ -8,7 +8,7 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 
-public class AppPreferences extends PreferenceActivity implements
+public class AppPreferences extends PreferenceFragment implements
 		OnSharedPreferenceChangeListener {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -33,17 +33,7 @@ public class AppPreferences extends PreferenceActivity implements
 
 	}
 
-	protected void onResume() {
-		super.onResume();
-		getPreferenceScreen().getSharedPreferences()
-				.registerOnSharedPreferenceChangeListener(this);
-	}
 
-	protected void onPause() {
-		super.onPause();
-		getPreferenceScreen().getSharedPreferences()
-				.unregisterOnSharedPreferenceChangeListener(this);
-	}
 
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
