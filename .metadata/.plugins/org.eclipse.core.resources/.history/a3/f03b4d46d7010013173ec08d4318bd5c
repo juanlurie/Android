@@ -1,0 +1,25 @@
+package com.example.tcpclient;
+
+import org.json.JSONObject;
+
+public class TransferData {
+	public String CommandType;
+	public String Parameter;
+
+	public String ToJson() {
+		return new JSONObject().put("CommandType", CommandType)
+				.put("Parameter", Parameter).toString();
+	}
+
+	public TransferData FromJson(String dataToDeserialize) {
+
+		TransferData transferData = new TransferData();
+
+		JSONObject jsonObject = new JSONObject(dataToDeserialize);
+		transferData.CommandType = (String) jsonObject.get("CommandType");
+		transferData.Parameter = jsonObject.get("Parameter")
+				.toString();
+		return transferData;
+	}
+
+}
