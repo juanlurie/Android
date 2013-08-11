@@ -1,0 +1,89 @@
+package com.example.android.effectivenavigation;
+
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import android.os.Bundle;
+import android.preference.EditTextPreference;
+import android.preference.Preference;
+import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.TableRow;
+
+public final class SettingsFragment extends Fragment implements
+		Button.OnClickListener {
+
+	public static final String ARG_SECTION_NUMBER = "section_number";
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View rootView = inflater.inflate(R.layout.settings, container, false);
+
+		SharedPreferences settings = PreferenceManager
+				.getDefaultSharedPreferences(getActivity());
+
+		String homeIp = settings.getString("prefHomeIp", "192.168.1.3");
+		String homePort = settings.getString("prefHomePort", "13000");
+
+		String arduinoIp = settings.getString("prefArduinoIp", "192.168.1.177");
+		String arduinoPort = settings.getString("prefArduinoPort", "23");
+		
+		TableRow row = (TableRow)rootView.findViewById(R.id.tableRow1);
+		
+		EditText homeip = (EditText) row.findViewById(R.id.homeIp);
+
+		EditText homeport = (EditText) rootView
+				.findViewById(R.id.homePort);
+
+		EditText arduinoip = (EditText) rootView.findViewById(
+				R.id.arduinoIp);
+
+		EditText arduinoport = (EditText) rootView.findViewById(
+				R.id.arduinoPort);
+
+		homeip.setText(homeIp);
+		homeport.setText(homePort);
+		arduinoip.setText(arduinoIp);
+		arduinoport.setText(arduinoPort);
+
+		Button plexConnectBtn = (Button) rootView
+				.findViewById(R.id.plexConnectButton);
+		plexConnectBtn.setOnClickListener(this);
+		return rootView;
+	}
+
+
+
+	@Override
+	public void onClick(View v) {
+
+		EditText homeip = (EditText) getActivity().findViewById(R.id.homeIp);
+
+		EditText homeport = (EditText) getActivity()
+				.findViewById(R.id.homePort);
+
+		EditText arduinoip = (EditText) getActivity().findViewById(
+				R.id.arduinoIp);
+
+		EditText arduinoport = (EditText) getActivity().findViewById(
+				R.id.arduinoPort);
+
+		SharedPreferences settings = PreferenceManager
+				.getDefaultSharedPreferences(getActivity());
+
+		Editor editor = settings.edit();
+		editor.putString("prefhomeIp", homeip.getText().toString());
+		editor.putString("prefhomePort", homeport.getText().toString());
+		editor.putString("prefarduinoIp", arduinoip.getText().toString());
+		editor.putString("prefarduinoPort", arduinoport.getText().toString());
+		editor.commit();
+
+	}
+
+}

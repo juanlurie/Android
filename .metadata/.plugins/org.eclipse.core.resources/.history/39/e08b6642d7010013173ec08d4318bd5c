@@ -1,7 +1,0 @@
-package com.example.tcpclient;
-
-public class TransferData {
-	public String CommandType;
-	public String Parameter;
-
-}

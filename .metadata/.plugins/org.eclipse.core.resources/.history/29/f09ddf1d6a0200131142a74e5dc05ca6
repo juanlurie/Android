@@ -1,0 +1,50 @@
+package com.example.android.effectivenavigation;
+
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import android.os.Bundle;
+import android.preference.EditTextPreference;
+import android.preference.Preference;
+import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.EditText;
+
+public final class SettingsFragment extends Fragment implements
+		Button.OnClickListener {
+
+	public static final String ARG_SECTION_NUMBER = "section_number";
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View rootView = inflater.inflate(R.layout.settings, container, false);
+		Button plexConnectBtn = (Button) rootView
+				.findViewById(R.id.plexConnectButton);
+		plexConnectBtn.setOnClickListener(this);
+		return rootView;
+	}
+
+	@Override
+	public void onClick(View v) {
+
+		EditText homeip = (EditText) getActivity().findViewById(
+				R.id.plexConnectButton);
+
+		SharedPreferences settings = PreferenceManager
+				.getDefaultSharedPreferences(getActivity());
+
+		Editor editor = settings.edit();
+		editor.putString("homeIp", homeip.getText().toString());
+		editor.putString("homePort", homeip.getText().toString());
+		editor.putString("arduinoIp", homeip.getText().toString());
+		editor.putString("arduinoPort", homeip.getText().toString());
+		editor.commit();
+
+	}
+
+}
