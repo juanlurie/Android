@@ -13,16 +13,16 @@
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="false" key="wholeword"/>
-		<item value="" key="selection"/>
+		<item value="Listener" key="selection"/>
 		<list key="findhistory">
+			<item value="listener"/>
+			<item value="plexConnectClick"/>
 			<item value="new activity"/>
 			<item value="getPageTitle"/>
 			<item value="3"/>
 			<item value="selectItem"/>
 			<item value="onCreateOptionsMenu"/>
 			<item value="4"/>
-			<item value="new ac"/>
-			<item value="setOnClickListener"/>
 		</list>
 		<list key="replacehistory">
 		</list>

@@ -1,0 +1,52 @@
+package com.example.android.effectivenavigation;
+
+import java.io.IOException;
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.ConnectionFactory;
+
+import android.app.Activity;
+import android.os.AsyncTask;
+public class RabbitHelper extends AsyncTask<Object, Object, String> {
+	private final static String QUEUE_NAME = "helloWorld";
+	public Activity Context;
+
+	private void runCommand(Object... commands) throws IOException {
+		String command = commands[0].toString();
+
+		   ConnectionFactory factory = new ConnectionFactory();
+		    factory.setHost("juanlurie-pc");
+		    Connection connection = factory.newConnection();
+		    Channel channel = connection.createChannel();
+
+		    channel.queueDeclare(QUEUE_NAME, false, false, false, null);
+		    String message = "Hello World!123123";
+		    channel.basicPublish("", QUEUE_NAME, null, message.getBytes());
+		    System.out.println(" [x] Sent '" + message + "'");
+		    
+		    channel.close();
+		    connection.close();
+
+	}
+
+
+	public void Run(String command) {
+		execute(command);
+	}
+
+	@Override
+	protected String doInBackground(Object... params) {
+		Context = (Activity) params[1];
+		try {
+			runCommand(params);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		
+return "";
+		
+	}
+
+}
