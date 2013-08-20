@@ -1,0 +1,90 @@
+package com.example.android.effectivenavigation;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import android.app.Activity;
+import android.content.Context;
+import android.os.AsyncTask;
+import android.os.Build;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Adapter;
+import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
+
+public class uTorrent extends Fragment {
+	
+
+
+
+	
+
+	private SimpleAdapter simpleAdpt;
+	private ListView lv;
+
+
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View rootView = inflater.inflate(
+				R.layout.utorrent, container, false);
+		
+		  lv = (ListView)rootView. findViewById(R.id.listView);
+		  
+		  initList();
+
+		    // We get the ListView component from the layout
+		  
+
+		    // This is a simple adapter that accepts as parameter
+		    // Context
+		    // Data list
+		    // The row layout that is used during the row creation
+		    // The keys used to retrieve the data
+		    // The View id used to show the data. The key number and the view id must match
+		    //simpleAdpt = new SimpleAdapter(getActivity(), planetsList,R.layout., new String[] {"planet"}, new int[] {android.R.id.text1});
+
+		    lv.setAdapter(simpleAdpt);
+	
+		
+		return rootView;
+	}
+	
+	// The data to show
+	List<Map<String, String>> planetsList = new ArrayList<Map<String,String>>();
+
+
+
+	   private void initList() {
+	    // We populate the planets
+
+	    planetsList.add(createPlanet("planet", "Mercury"));
+	    planetsList.add(createPlanet("planet", "Venus"));
+	    planetsList.add(createPlanet("planet", "Mars"));
+	    planetsList.add(createPlanet("planet", "Jupiter"));
+	    planetsList.add(createPlanet("planet", "Saturn"));
+	    planetsList.add(createPlanet("planet", "Uranus"));
+	    planetsList.add(createPlanet("planet", "Neptune"));
+
+	}
+	   
+	
+
+	private HashMap<String, String> createPlanet(String key, String name) {
+	    HashMap<String, String> planet = new HashMap<String, String>();
+	    planet.put(key, name);
+
+	    return planet;
+	}
+	
+	
+}

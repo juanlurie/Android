@@ -17,3 +17,7 @@
 1376682915568	Copy compilation unit
 1376688930265	Copy compilation unit
 1376749090028	Rename local variable 'tcpHelper'
+1376753607625	Delete element
+1376753705346	Copy compilation unit
+1376761868452	Rename type 'CopyOfRabbitHelper'
+1376761872465	Rename type 'RabbitConsumHelper'

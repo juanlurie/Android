@@ -1,0 +1,90 @@
+package com.example.android.effectivenavigation;
+
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.Socket;
+
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.ConnectionFactory;
+import com.rabbitmq.client.QueueingConsumer;
+
+import android.app.Activity;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
+import android.preference.PreferenceManager;
+import android.widget.TextView;
+import android.widget.Toast;
+
+public class CopyOfRabbitHelper extends AsyncTask<Object, Object, String> {
+	public Activity Context;
+	private Channel channel;
+
+	
+
+	
+
+	@Override
+	protected String doInBackground(Object... params) {
+		Context = (Activity) params[1];
+		try {
+
+			ConnectionFactory factory = new ConnectionFactory();
+			factory.setHost("192.168.1.3");
+			Connection connection = factory.newConnection();
+			channel = connection.createChannel();
+
+			channel.queueDeclare("helloWorld", false, false, false, null);
+
+			/*
+			 * String queueName = channel.queueDeclare().getQueue();
+			 * channel.queueBind(queueName, EXCHANGE_NAME, "");
+			 */
+
+			System.out
+					.println(" [*] Waiting for messages. To exit press CTRL+C");
+
+			QueueingConsumer consumer = new QueueingConsumer(channel);
+			channel.basicConsume("helloWorld", true, consumer);
+			
+			while (true) {
+				QueueingConsumer.Delivery delivery = consumer.nextDelivery();
+				final String message = new String(delivery.getBody());
+				
+				Context.runOnUiThread(new Runnable() {
+
+					@Override
+					public void run() {
+						TextView mOutput = (TextView)Context.findViewById(R.id.output);
+						
+						mOutput.append("\n"+message);
+					}
+				});
+				
+				
+				System.out.println(" [x] Received '" + message + "'");
+			}
+
+		} catch (Exception ex) {
+
+		}
+
+		return "";
+	}
+	
+	
+		@Override
+		protected void onCancelled() {
+			
+			try {
+				channel.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			super.onCancelled();
+		}
+
+}

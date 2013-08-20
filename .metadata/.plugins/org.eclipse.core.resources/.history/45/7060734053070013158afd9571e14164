@@ -1,0 +1,76 @@
+package com.example.android.effectivenavigation;
+
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.InputStreamReader;
+import java.net.Socket;
+
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.ConnectionFactory;
+import com.rabbitmq.client.QueueingConsumer;
+
+import android.app.Activity;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
+import android.preference.PreferenceManager;
+import android.widget.TextView;
+import android.widget.Toast;
+
+public class CopyOfRabbitHelper extends AsyncTask<Object, Object, String> {
+	public Activity Context;
+
+	private void runCommand(Object... commands) {
+		String command = commands[0].toString();
+
+		try {
+
+			ConnectionFactory factory = new ConnectionFactory();
+			factory.setHost("localhost");
+			Connection connection = factory.newConnection();
+			Channel channel = connection.createChannel();
+
+			channel.queueDeclare("helloWorld", false, false, false, null);
+
+			/*
+			 * String queueName = channel.queueDeclare().getQueue();
+			 * channel.queueBind(queueName, EXCHANGE_NAME, "");
+			 */
+
+			System.out
+					.println(" [*] Waiting for messages. To exit press CTRL+C");
+
+			QueueingConsumer consumer = new QueueingConsumer(channel);
+			channel.basicConsume("helloWorld", true, consumer);
+
+			while (true) {
+				QueueingConsumer.Delivery delivery = consumer.nextDelivery();
+				String message = new String(delivery.getBody());
+
+				System.out.println(" [x] Received '" + message + "'");
+			}
+
+		} catch (Exception ex) {
+
+		}
+
+	}
+
+	protected void onPostExecute(String result) {
+		Toast.makeText((Activity) Context, "Message Sent", Toast.LENGTH_SHORT)
+				.show();
+	}
+
+	public void Run(String command, Activity context) {
+		execute(command, context);
+	}
+
+	@Override
+	protected String doInBackground(Object... params) {
+		Context = (Activity) params[1];
+		runCommand(params);
+
+		return "";
+	}
+
+}
