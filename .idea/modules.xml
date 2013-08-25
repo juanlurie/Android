@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/EntryActivity/EntryActivity.iml" filepath="$PROJECT_DIR$/EntryActivity/EntryActivity.iml" />
+      <module fileurl="file://$PROJECT_DIR$/HomeCommander/HomeCommander.iml" filepath="$PROJECT_DIR$/HomeCommander/HomeCommander.iml" />
+      <module fileurl="file://$PROJECT_DIR$/RabbitClient/RabbitClient.iml" filepath="$PROJECT_DIR$/RabbitClient/RabbitClient.iml" />
+    </modules>
+  </component>
+</project>
+
