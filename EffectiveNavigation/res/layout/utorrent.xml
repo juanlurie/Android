@@ -1,10 +1,81 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true">
+    <LinearLayout
+            android:layout_width="wrap_content"
+            android:orientation="horizontal"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center_vertical">
 
-    <ListView android:id="@+id/listView" 
-              android:layout_height="match_parent"
-              android:layout_width="match_parent"/>
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Start All"
+                android:id="@+id/buttonStartAll"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                style="@style/btnStyleArsenic"/>
 
-</RelativeLayout>
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Stop All"
+                android:id="@+id/buttonStopAll"
+                style="@style/btnStyleArsenic"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"/>
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/btnStyleArsenic"
+                android:text="Remove Complete"
+                android:id="@+id/buttonRemoveComplete"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"/>
+
+    </LinearLayout>
+    <LinearLayout
+            android:layout_width="wrap_content"
+            android:orientation="horizontal"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center_vertical">
+
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/btnStyleArsenic"
+                android:text="All"
+                android:id="@+id/buttonAll"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                />
+
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Active"
+            style="@style/btnStyleArsenic"
+            android:id="@+id/buttonActive"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"/>
+    </LinearLayout>
+
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+
+        <ListView
+                android:id="@+id/listView"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"/>
+
+    </RelativeLayout>
+</LinearLayout>
+
+

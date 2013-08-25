@@ -1,16 +1,16 @@
 package com.example.android.effectivenavigation;
 
-import java.io.IOException;
+import android.app.Activity;
+import android.os.AsyncTask;
+import android.text.method.ScrollingMovementMethod;
+import android.widget.TextView;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.QueueingConsumer;
 
-import android.app.Activity;
-import android.os.AsyncTask;
-import android.text.method.ScrollingMovementMethod;
-import android.widget.TextView;
+import java.io.IOException;
 
 public class RabbitConsumeHelper extends AsyncTask<Object, Object, String> {
 	public Activity Context;

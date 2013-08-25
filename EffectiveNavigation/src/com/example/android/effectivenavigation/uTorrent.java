@@ -1,127 +1,154 @@
 package com.example.android.effectivenavigation;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import android.app.Activity;
-import android.content.Context;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.ContextMenu;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.AdapterView;
-import android.widget.AdapterView.AdapterContextMenuInfo;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import android.widget.TextView;
 import android.widget.Toast;
 
-public class uTorrent extends Fragment {
+import org.json.JSONException;
 
-	private SimpleAdapter simpleAdpt;
+import java.util.HashMap;
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		View rootView = inflater.inflate(R.layout.utorrent, container, false);
+public class uTorrent extends Fragment implements
+        Button.OnClickListener, View.OnLongClickListener {
+    public static SimpleAdapter simpleAdpt;
+    private ListView lv;
 
-		ListView lv = (ListView) rootView.findViewById(R.id.listView);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.utorrent, container, false);
+        lv = (ListView) rootView.findViewById(R.id.listView);
 
-		initList();
+        final Button buttonAll = (Button) rootView.findViewById(R.id.buttonAll);
+        final Button buttonActive = (Button) rootView.findViewById(R.id.buttonActive);
+        final Button buttonStartAll = (Button) rootView.findViewById(R.id.buttonStartAll);
+        final Button buttonStopAll = (Button) rootView.findViewById(R.id.buttonStopAll);
+        final Button buttonRemoveComplete = (Button) rootView.findViewById(R.id.buttonRemoveComplete);
+        buttonStartAll.setOnClickListener(this);
+        buttonStopAll.setOnClickListener(this);
+        buttonRemoveComplete.setOnClickListener(this);
+        buttonAll.setOnClickListener(this);
+        buttonActive.setOnClickListener(this);
 
-		// We get the ListView component from the layout
+        // React to user clicks on item
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-		// This is a simple adapter that accepts as parameter
-		// Context
-		// Data list
-		// The row layout that is used during the row creation
-		// The keys used to retrieve the data
-		// The View id used to show the data. The key number and the view id
-		// must match
-		simpleAdpt = new SimpleAdapter(getActivity(), planetsList,
-				R.layout.simplecrap, new String[] { "planet","1" },
-				new int[] { R.id.name,R.id.slogan });
+            public void onItemClick(AdapterView<?> parentAdapter, View view,
+                                    int position, long id) {
 
-		lv.setAdapter(simpleAdpt);
+                // We know the View is a TextView so we can cast it
 
-		// React to user clicks on item
-		lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-			public void onItemClick(AdapterView<?> parentAdapter, View view,
-					int position, long id) {
+                Toast.makeText(
+                        getActivity(),
+                        "Item with id [" + id + "] - Position [" + position
+                                + "] - Planet []",
+                        Toast.LENGTH_SHORT).show();
 
-				// We know the View is a TextView so we can cast it
-				TextView clickedView = (TextView) view;
+            }
+        });
+        registerForContextMenu(lv);
 
-				Toast.makeText(
-						getActivity(),
-						"Item with id [" + id + "] - Position [" + position
-								+ "] - Planet [" + clickedView.getText() + "]",
-						Toast.LENGTH_SHORT).show();
+        return rootView;
+    }
 
-			}
-		});
-		registerForContextMenu(lv);
+    // This method is called when user selects an Item in the Context menu
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
+        // Implements our logic
+        String hash = "";
+        for (int i = 0;i <simpleAdpt.getCount();i++ )
+        {
+            HashMap map = (HashMap) simpleAdpt.getItem(i);
+            if( map.get("id").toString() == Integer.toString(itemId))
+            {
+                hash = map.get("hash").toString();
+            }
+        }
 
-		return rootView;
-	}
 
-	// This method is called when user selects an Item in the Context menu
-	@Override
-	public boolean onContextItemSelected(MenuItem item) {
-		int itemId = item.getItemId();
-		// Implements our logic
-		Toast.makeText(getActivity(), "Item id [" + itemId + "]",
-				Toast.LENGTH_SHORT).show();
-		return true;
-	}
 
-	// We want to create a context Menu when the user long click on an item
-	@Override
-	public void onCreateContextMenu(ContextMenu menu, View v,
-			ContextMenuInfo menuInfo) {
+        try {
+            SendJsonCommand(hash,item.getOrder());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
-		super.onCreateContextMenu(menu, v, menuInfo);
-		AdapterContextMenuInfo aInfo = (AdapterContextMenuInfo) menuInfo;
+        return true;
+    }
 
-		// We know that each row in the adapter is a Map
-		HashMap map = (HashMap) simpleAdpt.getItem(aInfo.position);
+    // We want to create a context Menu when the user long click on an item
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v,
+                                    ContextMenu.ContextMenuInfo menuInfo) {
 
-		menu.setHeaderTitle("Options for " + map.get("planet"));
-		menu.add(1, 1, 1, "Details");
-		menu.add(1, 2, 2, "Delete");
+        super.onCreateContextMenu(menu, v, menuInfo);
+        AdapterView.AdapterContextMenuInfo aInfo = (AdapterView.AdapterContextMenuInfo) menuInfo;
 
-	}
+        // We know that each row in the adapter is a Map
+        HashMap map = (HashMap) simpleAdpt.getItem(aInfo.position);
 
-	// The data to show
-	List<Map<String, String>> planetsList = new ArrayList<Map<String, String>>();
+        menu.setHeaderTitle("Options for " + map.get("name"));
+        menu.add(1,aInfo.position, 1, "Start");
+        menu.add(1, aInfo.position, 2, "Stop");
+    }
 
-	private void initList() {
-		// We populate the planets
-		for (UtorrentData item : ConsumeData.UtorrentDataList) {
-			planetsList.add(createPlanet("planet", item.Name));
-		}
+    public void SendJson(CommandTypes CommandType, String Parameter) throws JSONException {
+        RefreshUtorrentTask refreshUtorrentTask = new RefreshUtorrentTask();
+        TransferData transferData = new TransferData();
+        transferData.CommandType = CommandType.index();
+        transferData.Parameter = Parameter;
+        refreshUtorrentTask.execute(transferData.ToJson(), getActivity());
 
-	}
+    }
 
-	private HashMap<String, String> createPlanet(String key, String name) {
-		HashMap<String, String> planet = new HashMap<String, String>();
-		planet.put(key, name);
-		planet.put("1", "12345");
-		
+    public void SendJsonCommand(String hash, int command) throws JSONException {
+        UtorrentCommandTask utorrentCommandTask = new UtorrentCommandTask();
+        UtorrentCommand utorrentCommand = new UtorrentCommand();
+        utorrentCommand.Hash = hash;
+        utorrentCommand.command = command;
+        utorrentCommandTask.execute(utorrentCommand, getActivity());
 
-		return planet;
-	}
+    }
 
+    @Override
+    public void onClick(View view) {
+        try {
+            switch (view.getId()) {
+                case R.id.buttonActive:
+                    SendJson(CommandTypes.Utorrent, "1");
+                    break;
+                case R.id.buttonAll:
+                    SendJson(CommandTypes.Utorrent, "2");
+                    break;
+                case R.id.buttonStartAll:
+                    SendJsonCommand("", 3);
+                    break;
+                case R.id.buttonStopAll:
+                    SendJsonCommand("", 4);
+                    break;
+                case R.id.buttonRemoveComplete:
+                    SendJsonCommand("", 5);
+                    break;
+            }
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public boolean onLongClick(View view) {
+        return false;
+    }
 }

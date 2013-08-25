@@ -1,14 +1,10 @@
 package com.example.android.effectivenavigation;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.http.NameValuePair;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import com.google.gson.Gson;
+
+import org.json.JSONException;
+
+import java.util.List;
 
 public final class ConsumeData {
 

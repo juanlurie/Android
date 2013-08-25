@@ -1,12 +1,5 @@
 package com.example.android.effectivenavigation;
 
-import java.io.UnsupportedEncodingException;
-import java.util.Calendar;
-import java.util.Date;
-
-import org.json.JSONException;
-
-import android.app.Activity;
 import android.app.TimePickerDialog;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -17,11 +10,14 @@ import android.view.View;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
-import android.widget.ToggleButton;
+
+import org.json.JSONException;
+
+import java.util.Calendar;
+import java.util.Date;
 
 public final class PcFragment extends Fragment implements
 		Button.OnClickListener, OnLongClickListener {
@@ -29,7 +25,7 @@ public final class PcFragment extends Fragment implements
 	public static final String ARG_SECTION_NUMBER = "section_number";
 
 	private TextView mOutput;
-	private RabbitConsumeHelper ra;
+	private RabbitConsumeHelper rabbitConsumeHelper;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -65,8 +61,6 @@ public final class PcFragment extends Fragment implements
 			hour = selectedHour;
 			minute = selectedMinute;
 
-			TcpHelper tcpHelper = new TcpHelper();
-
 			Calendar calendar = Calendar.getInstance();
 			calendar.setTime(new Date());
 			Calendar newCalendar = Calendar.getInstance();
@@ -91,17 +85,18 @@ public final class PcFragment extends Fragment implements
 	};
 
 	public void SendJson(CommandTypes CommandType, String Parameter) throws JSONException {
-		TcpHelper tcpHelper = new TcpHelper();
+		RefreshUtorrentTask refreshUtorrentTask = new RefreshUtorrentTask();
 		TransferData transferData = new TransferData();
 		transferData.CommandType = CommandType.index();
 		transferData.Parameter = Parameter;
-		tcpHelper.Run(transferData.ToJson(), getActivity());
+		refreshUtorrentTask.execute(transferData.ToJson(), getActivity());
 	}
 
 	public void shutdown() {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(new Date());
-
+        calendar.set(Calendar.HOUR_OF_DAY,calendar.get(Calendar.HOUR_OF_DAY) + 1 );
+        calendar.set(Calendar.MINUTE,0);
 		hour = calendar.get(Calendar.HOUR_OF_DAY);
 		minute = calendar.get(Calendar.MINUTE);
 

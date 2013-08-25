@@ -16,8 +16,6 @@
 
 package com.example.android.effectivenavigation;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
 import android.os.AsyncTask;
@@ -32,7 +30,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 public class HomeCommander extends FragmentActivity implements
@@ -49,7 +46,7 @@ public class HomeCommander extends FragmentActivity implements
 
 	ViewPager mViewPager;
 
-	private RabbitConsumeHelper ra;
+//	private RabbitConsumeHelper ra;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -101,12 +98,12 @@ public class HomeCommander extends FragmentActivity implements
 					.setTabListener(this));
 		}
 
-		ra = new RabbitConsumeHelper();
+	//	ra = new RabbitConsumeHelper();
 
-		ra.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "", this);
+		//ra.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "", this);
 	}
 
-	@Override
+/*	@Override
 	public void onPause() {
 		super.onPause();
 		try
@@ -125,9 +122,9 @@ public class HomeCommander extends FragmentActivity implements
 			ra = new RabbitConsumeHelper();
 			ra.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "", this);
 		}
-	}
+	}*/
 
-	@Override
+	/*@Override
 	protected void onStop() {
 		super.onStop();
 	};
@@ -139,7 +136,7 @@ public class HomeCommander extends FragmentActivity implements
 			ra = new RabbitConsumeHelper();
 			ra.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "", this);
 		}
-	};
+	};*/
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {

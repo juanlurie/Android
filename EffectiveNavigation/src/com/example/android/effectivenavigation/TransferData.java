@@ -1,19 +1,18 @@
 package com.example.android.effectivenavigation;
 
+import com.google.gson.Gson;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.List;
 
 public class TransferData {
 	public String Message = "";
 	public int CommandType;
 	public String Parameter;
+    public List<UtorrentData> UtorrentDataList;
 
-	public TransferData(String dataToDeserialize) throws JSONException {
-		JSONObject jsonObject = new JSONObject(dataToDeserialize);
-		CommandType = (Integer) jsonObject.get("CommandType");
-		Parameter = jsonObject.get("Parameter").toString();
-		Message = jsonObject.get("Message").toString();
-	}
 
 	public TransferData() {
 

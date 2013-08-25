@@ -1,6 +1,5 @@
 package com.example.android.effectivenavigation;
 
-import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
