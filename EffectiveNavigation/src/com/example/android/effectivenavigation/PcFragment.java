@@ -1,6 +1,9 @@
 package com.example.android.effectivenavigation;
 
 import android.app.TimePickerDialog;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -118,8 +121,17 @@ public final class PcFragment extends Fragment implements
 	public void plexClick() throws JSONException {
 		SendViaRabbit(CommandTypes.Plex, "");
 	}
+    public static boolean haveInternet(Context ctx) {
+        ConnectivityManager info = ((ConnectivityManager) ctx.getSystemService(Context.CONNECTIVITY_SERVICE));
+        NetworkInfo wifi = info.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        if(wifi.isAvailable())
+            return true;
 
+        return false;
+    }
 	public void SendViaRabbit(CommandTypes CommandType, String Parameter) throws JSONException {
+        if(haveInternet(getActivity()))
+        {
 		RabbitHelper rabbitHelper = new RabbitHelper();
 		TransferData transferData = new TransferData();
 		transferData.CommandType = CommandType.index();
@@ -132,6 +144,10 @@ public final class PcFragment extends Fragment implements
 		} else {
 			rabbitHelper.execute(transferData.ToJson(), getActivity());
 		}
+        }else
+        {
+            Toast.makeText(getActivity(),"Not Connected To Wifi",Toast.LENGTH_SHORT).show();
+        }
 
 	}
 

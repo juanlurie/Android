@@ -1,5 +1,9 @@
 package com.example.android.effectivenavigation;
 
+import android.content.Context;
+import android.hardware.Camera;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -7,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import org.json.JSONException;
 
@@ -32,7 +37,19 @@ public class Dashboard extends Fragment {
 
 	}
 
+    private boolean isLighOn = false;
 
+    private Camera camera;
+
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        if (camera != null) {
+            camera.release();
+        }
+    }
 	
 
 	@Override
@@ -40,19 +57,17 @@ public class Dashboard extends Fragment {
 			Bundle savedInstanceState) {
 		View rootView = inflater.inflate(
 				R.layout.dashboard, container, false);
-		
+
+
 		rootView.findViewById(R.id.refreshDashboard).setOnClickListener(
 				new View.OnClickListener() {
 					@Override
 					public void onClick(View view) {
 						switch (view.getId()) {
 						case R.id.refreshDashboard:
-							try {
-								nextShutdown();
-							} catch (JSONException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
+
+
+
 							break;
 						}
 					}

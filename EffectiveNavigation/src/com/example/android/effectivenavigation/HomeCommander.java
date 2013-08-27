@@ -18,7 +18,9 @@ package com.example.android.effectivenavigation;
 
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
-import android.os.AsyncTask;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
@@ -31,80 +33,24 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class HomeCommander extends FragmentActivity implements
-		ActionBar.TabListener {
+        ActionBar.TabListener {
 
-	public static final String PREFS_NAME = "MySettings";
+    public static final String PREFS_NAME = "MySettings";
+    private static final int RESULT_SETTINGS = 1;
+    AppSectionsPagerAdapter mAppSectionsPagerAdapter;
+    ViewPager mViewPager;
+    private DrawerLayout mDrawerLayout;
+    private ListView mDrawerList;
+    private ActionBarDrawerToggle mDrawerToggle;
 
-	private DrawerLayout mDrawerLayout;
-	private ListView mDrawerList;
-	private ActionBarDrawerToggle mDrawerToggle;
-	private String[] mMenuItems;
-
-	AppSectionsPagerAdapter mAppSectionsPagerAdapter;
-
-	ViewPager mViewPager;
-
-//	private RabbitConsumeHelper ra;
-
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
-
-		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-
-		mMenuItems = getResources().getStringArray(R.array.environment_array);
-
-		getActionBar().setDisplayHomeAsUpEnabled(true);
-		getActionBar().setHomeButtonEnabled(true);
-
-		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
-				R.drawable.ic_drawer, R.string.drawer_open,
-				R.string.drawer_close) {
-			public void onDrawerClosed(View view) {
-				invalidateOptionsMenu();
-			}
-
-			public void onDrawerOpened(View drawerView) {
-				invalidateOptionsMenu();
-			}
-		};
-		mDrawerLayout.setDrawerListener(mDrawerToggle);
-
-		mAppSectionsPagerAdapter = new AppSectionsPagerAdapter(
-				getSupportFragmentManager());
-
-		final ActionBar actionBar = getActionBar();
-
-		actionBar.setHomeButtonEnabled(false);
-
-		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-
-		mViewPager = (ViewPager) findViewById(R.id.pager);
-		mViewPager.setAdapter(mAppSectionsPagerAdapter);
-		mViewPager
-				.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-					@Override
-					public void onPageSelected(int position) {
-						actionBar.setSelectedNavigationItem(position);
-					}
-				});
-
-		for (int i = 0; i < mAppSectionsPagerAdapter.getCount(); i++) {
-
-			actionBar.addTab(actionBar.newTab()
-					.setText(mAppSectionsPagerAdapter.getPageTitle(i))
-					.setTabListener(this));
-		}
-
-	//	ra = new RabbitConsumeHelper();
-
-		//ra.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "", this);
-	}
+    //	private RabbitConsumeHelper ra;
+    private String[] mMenuItems;
 
 /*	@Override
-	public void onPause() {
+    public void onPause() {
 		super.onPause();
 		try
 
@@ -138,109 +84,164 @@ public class HomeCommander extends FragmentActivity implements
 		}
 	};*/
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
 
-		if (mDrawerToggle.onOptionsItemSelected(item)) {
-			return true;
-		}
-		return false;
 
-	}
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
-	@Override
-	public void onTabUnselected(ActionBar.Tab tab,
-			FragmentTransaction fragmentTransaction) {
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
-		InputMethodManager mgr = (InputMethodManager) getSystemService(this.INPUT_METHOD_SERVICE);
+        mMenuItems = getResources().getStringArray(R.array.environment_array);
 
-		mgr.hideSoftInputFromWindow(mDrawerLayout.getWindowToken(), 0);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setHomeButtonEnabled(true);
 
-	}
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
+                R.drawable.ic_drawer, R.string.drawer_open,
+                R.string.drawer_close) {
+            public void onDrawerClosed(View view) {
+                invalidateOptionsMenu();
+            }
 
-	@Override
-	public void onTabSelected(ActionBar.Tab tab,
-			FragmentTransaction fragmentTransaction) {
+            public void onDrawerOpened(View drawerView) {
+                invalidateOptionsMenu();
+            }
+        };
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-		mViewPager.setCurrentItem(tab.getPosition());
-	}
+        mAppSectionsPagerAdapter = new AppSectionsPagerAdapter(
+                getSupportFragmentManager());
 
-	@Override
-	public void onTabReselected(ActionBar.Tab tab,
-			FragmentTransaction fragmentTransaction) {
-	}
+        final ActionBar actionBar = getActionBar();
 
-	private static final int RESULT_SETTINGS = 1;
+        actionBar.setHomeButtonEnabled(false);
 
-	public class AppSectionsPagerAdapter extends FragmentPagerAdapter {
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-		public AppSectionsPagerAdapter(FragmentManager fm) {
-			super(fm);
-		}
+        mViewPager = (ViewPager) findViewById(R.id.pager);
+        mViewPager.setAdapter(mAppSectionsPagerAdapter);
+        mViewPager
+                .setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+                    @Override
+                    public void onPageSelected(int position) {
+                        actionBar.setSelectedNavigationItem(position);
+                    }
+                });
 
-		@Override
-		public Fragment getItem(int i) {
-			switch (i) {
-			case 0:
-				return new Dashboard();
-			case 1:
+        for (int i = 0; i < mAppSectionsPagerAdapter.getCount(); i++) {
 
-				Fragment fragment = new PcFragment();
-				Bundle args = new Bundle();
-				args.putInt(PcFragment.ARG_SECTION_NUMBER, i + 1);
-				fragment.setArguments(args);
-				return fragment;
-			case 2:
+            actionBar.addTab(actionBar.newTab()
+                    .setText(mAppSectionsPagerAdapter.getPageTitle(i))
+                    .setTabListener(this));
+        }
 
-				Fragment fragment2 = new ArduinoFragment();
-				Bundle args2 = new Bundle();
-				args2.putInt(ArduinoFragment.ARG_SECTION_NUMBER, i + 1);
-				fragment2.setArguments(args2);
-				return fragment2;
+        //	ra = new RabbitConsumeHelper();
 
-			case 3:
+        //ra.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "", this);
+    }
 
-				Fragment fragment3 = new SettingsFragment();
-				Bundle args3 = new Bundle();
-				args3.putInt(ArduinoFragment.ARG_SECTION_NUMBER, i + 1);
-				fragment3.setArguments(args3);
-				return fragment3;
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
 
-			case 4:
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        return false;
 
-				Fragment fragment4 = new uTorrent();
-				Bundle args4 = new Bundle();
-				args4.putInt(ArduinoFragment.ARG_SECTION_NUMBER, i + 1);
-				fragment4.setArguments(args4);
-				return fragment4;
+    }
 
-			}
-			return null;
-		}
+    @Override
+    public void onTabUnselected(ActionBar.Tab tab,
+                                FragmentTransaction fragmentTransaction) {
 
-		@Override
-		public int getCount() {
-			return 5;
-		}
+        InputMethodManager mgr = (InputMethodManager) getSystemService(this.INPUT_METHOD_SERVICE);
 
-		@Override
-		public CharSequence getPageTitle(int position) {
-			switch (position) {
-			case 0:
-				return "Dashboard";
-			case 1:
-				return "PC";
-			case 2:
-				return "Arduino";
-			case 3:
-				
-				return "Settings";
-			case 4:
-				return "uTorrent";
+        mgr.hideSoftInputFromWindow(mDrawerLayout.getWindowToken(), 0);
 
-			}
-			return null;
-		}
-	}
+    }
+
+    @Override
+    public void onTabSelected(ActionBar.Tab tab,
+                              FragmentTransaction fragmentTransaction) {
+
+        mViewPager.setCurrentItem(tab.getPosition());
+    }
+
+    @Override
+    public void onTabReselected(ActionBar.Tab tab,
+                                FragmentTransaction fragmentTransaction) {
+    }
+
+    public class AppSectionsPagerAdapter extends FragmentPagerAdapter {
+
+        public AppSectionsPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int i) {
+            switch (i) {
+                case 0:
+                    return new Dashboard();
+                case 1:
+
+                    Fragment fragment = new PcFragment();
+                    Bundle args = new Bundle();
+                    args.putInt(PcFragment.ARG_SECTION_NUMBER, i + 1);
+                    fragment.setArguments(args);
+                    return fragment;
+                case 2:
+                    Fragment fragment4 = new uTorrent();
+                    Bundle args4 = new Bundle();
+                    args4.putInt(ArduinoFragment.ARG_SECTION_NUMBER, i + 1);
+                    fragment4.setArguments(args4);
+                    return fragment4;
+
+
+                case 3:
+
+                    Fragment fragment3 = new SettingsFragment();
+                    Bundle args3 = new Bundle();
+                    args3.putInt(ArduinoFragment.ARG_SECTION_NUMBER, i + 1);
+                    fragment3.setArguments(args3);
+                    return fragment3;
+
+                case 4:
+                    Fragment fragment2 = new ArduinoFragment();
+                    Bundle args2 = new Bundle();
+                    args2.putInt(ArduinoFragment.ARG_SECTION_NUMBER, i + 1);
+                    fragment2.setArguments(args2);
+                    return fragment2;
+
+
+            }
+            return null;
+        }
+
+        @Override
+        public int getCount() {
+            return 5;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            switch (position) {
+                case 0:
+                    return "Dashboard";
+                case 1:
+                    return "PC";
+                case 2:
+                    return "uTorrent";
+                case 3:
+
+                    return "Settings";
+                case 4:
+                    return "Arduino";
+
+            }
+            return null;
+        }
+    }
 
 }

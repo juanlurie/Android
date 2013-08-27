@@ -23,7 +23,7 @@ import java.util.Map;
 public class RefreshUtorrentTask extends AsyncTask<Object, Object, TransferData> {
 
     public Activity Context;
-    List<Map<String, String>> planetsList = new ArrayList<Map<String, String>>();
+    List<Map<String, String>> utorrentList = new ArrayList<Map<String, String>>();
     private ListView lv;
 
     private TransferData runCommand(Object... commands) {
@@ -70,11 +70,11 @@ public class RefreshUtorrentTask extends AsyncTask<Object, Object, TransferData>
     protected void onPostExecute(TransferData transferData) {
         lv = (ListView) Context.findViewById(R.id.listView);
         for (UtorrentData item : transferData.UtorrentDataList) {
-            planetsList.add(createPlanet(item));
+            utorrentList.add(createPlanet(item));
         }
-        uTorrent.simpleAdpt = new SimpleAdapter(Context, planetsList,
-                R.layout.simplecrap, new String[]{"name", "progress", "speed", "remaining", "eta"},
-                new int[]{R.id.name, R.id.slogan, R.id.speed, R.id.remaining, R.id.eta});
+        uTorrent.simpleAdpt = new SimpleAdapter(Context, utorrentList,
+                R.layout.utorrentview, new String[]{"name", "progress", "speed", "remaining", "eta"},
+                new int[]{R.id.name, R.id.progress, R.id.speed, R.id.remaining, R.id.eta});
         lv.setAdapter(uTorrent.simpleAdpt);
 
     }

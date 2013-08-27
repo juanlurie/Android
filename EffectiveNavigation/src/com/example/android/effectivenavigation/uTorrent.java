@@ -1,5 +1,10 @@
 package com.example.android.effectivenavigation;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.ContextMenu;
@@ -21,6 +26,28 @@ public class uTorrent extends Fragment implements
         Button.OnClickListener, View.OnLongClickListener {
     public static SimpleAdapter simpleAdpt;
     private ListView lv;
+
+    public boolean haveInternet(Context ctx) {
+        ConnectivityManager info = ((ConnectivityManager) ctx.getSystemService(Context.CONNECTIVITY_SERVICE));
+        NetworkInfo wifi = info.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+        if (wifi.isAvailable())
+            return true;
+
+        AlertDialog alert = new AlertDialog.Builder(getActivity())
+                .create();
+        alert.setTitle("Error");
+        alert.setMessage("No Wifi Connected!");
+        alert.setButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                // closing the application
+                getActivity().finish();
+            }
+        });
+        alert.show();
+
+        return false;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -67,19 +94,16 @@ public class uTorrent extends Fragment implements
         int itemId = item.getItemId();
         // Implements our logic
         String hash = "";
-        for (int i = 0;i <simpleAdpt.getCount();i++ )
-        {
+        for (int i = 0; i < simpleAdpt.getCount(); i++) {
             HashMap map = (HashMap) simpleAdpt.getItem(i);
-            if( map.get("id").toString() == Integer.toString(itemId))
-            {
+            if (map.get("id").toString() == Integer.toString(itemId)) {
                 hash = map.get("hash").toString();
             }
         }
 
 
-
         try {
-            SendJsonCommand(hash,item.getOrder());
+            SendJsonCommand(hash, item.getOrder());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -97,28 +121,34 @@ public class uTorrent extends Fragment implements
 
         // We know that each row in the adapter is a Map
         HashMap map = (HashMap) simpleAdpt.getItem(aInfo.position);
-
+        int id = Integer.parseInt((String) map.get("id"));
         menu.setHeaderTitle("Options for " + map.get("name"));
-        menu.add(1,aInfo.position, 1, "Start");
-        menu.add(1, aInfo.position, 2, "Stop");
+        menu.add(1, id, 1, "Start");
+        menu.add(1, id, 2, "Stop");
     }
 
     public void SendJson(CommandTypes CommandType, String Parameter) throws JSONException {
-        RefreshUtorrentTask refreshUtorrentTask = new RefreshUtorrentTask();
-        TransferData transferData = new TransferData();
-        transferData.CommandType = CommandType.index();
-        transferData.Parameter = Parameter;
-        refreshUtorrentTask.execute(transferData.ToJson(), getActivity());
+        if (haveInternet(getActivity())) {
+            RefreshUtorrentTask refreshUtorrentTask = new RefreshUtorrentTask();
+            TransferData transferData = new TransferData();
+            transferData.CommandType = CommandType.index();
+            transferData.Parameter = Parameter;
+            refreshUtorrentTask.execute(transferData.ToJson(), getActivity());
+        }
+
 
     }
 
     public void SendJsonCommand(String hash, int command) throws JSONException {
-        UtorrentCommandTask utorrentCommandTask = new UtorrentCommandTask();
-        UtorrentCommand utorrentCommand = new UtorrentCommand();
-        utorrentCommand.Hash = hash;
-        utorrentCommand.command = command;
-        utorrentCommandTask.execute(utorrentCommand, getActivity());
-
+        if (haveInternet(getActivity())) {
+            UtorrentCommandTask utorrentCommandTask = new UtorrentCommandTask();
+            UtorrentCommand utorrentCommand = new UtorrentCommand();
+            utorrentCommand.Hash = hash;
+            utorrentCommand.command = command;
+            utorrentCommandTask.execute(utorrentCommand, getActivity());
+        } else {
+            Toast.makeText(getActivity(), "Not connected To Wifi", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
