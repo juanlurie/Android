@@ -1,6 +1,7 @@
 package com.example.android.effectivenavigation;
 
 import android.app.AlertDialog;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.net.ConnectivityManager;
@@ -168,7 +169,15 @@ public class uTorrent extends Fragment implements
                     SendJsonCommand("", 4);
                     break;
                 case R.id.buttonRemoveComplete:
-                    SendJsonCommand("", 5);
+
+
+
+                    utorrentSettingsDialog settingsDialog = new utorrentSettingsDialog();
+                  settingsDialog.show(getActivity().getFragmentManager(),"MyTag");
+
+
+
+
                     break;
             }
         } catch (JSONException e) {
