@@ -1,7 +1,6 @@
 package com.example.android.effectivenavigation;
 
 import android.app.AlertDialog;
-import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.net.ConnectivityManager;
@@ -55,12 +54,12 @@ public class uTorrent extends Fragment implements
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.utorrent, container, false);
         lv = (ListView) rootView.findViewById(R.id.listView);
-
+        lv.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         final Button buttonAll = (Button) rootView.findViewById(R.id.buttonAll);
         final Button buttonActive = (Button) rootView.findViewById(R.id.buttonActive);
         final Button buttonStartAll = (Button) rootView.findViewById(R.id.buttonStartAll);
         final Button buttonStopAll = (Button) rootView.findViewById(R.id.buttonStopAll);
-        final Button buttonRemoveComplete = (Button) rootView.findViewById(R.id.buttonRemoveComplete);
+        final Button buttonRemoveComplete = (Button) rootView.findViewById(R.id.buttonSettings);
         buttonStartAll.setOnClickListener(this);
         buttonStopAll.setOnClickListener(this);
         buttonRemoveComplete.setOnClickListener(this);
@@ -102,7 +101,6 @@ public class uTorrent extends Fragment implements
             }
         }
 
-
         try {
             SendJsonCommand(hash, item.getOrder());
         } catch (JSONException e) {
@@ -126,6 +124,7 @@ public class uTorrent extends Fragment implements
         menu.setHeaderTitle("Options for " + map.get("name"));
         menu.add(1, id, 1, "Start");
         menu.add(1, id, 2, "Stop");
+        menu.add(1, id, 3, "Remove");
     }
 
     public void SendJson(CommandTypes CommandType, String Parameter) throws JSONException {
@@ -163,21 +162,14 @@ public class uTorrent extends Fragment implements
                     SendJson(CommandTypes.Utorrent, "2");
                     break;
                 case R.id.buttonStartAll:
-                    SendJsonCommand("", 3);
-                    break;
-                case R.id.buttonStopAll:
                     SendJsonCommand("", 4);
                     break;
-                case R.id.buttonRemoveComplete:
-
-
-
+                case R.id.buttonStopAll:
+                    SendJsonCommand("", 5);
+                    break;
+                case R.id.buttonSettings:
                     utorrentSettingsDialog settingsDialog = new utorrentSettingsDialog();
                   settingsDialog.show(getActivity().getFragmentManager(),"MyTag");
-
-
-
-
                     break;
             }
         } catch (JSONException e) {

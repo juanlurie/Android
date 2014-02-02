@@ -43,6 +43,12 @@ public final class PcFragment extends Fragment implements
 		Button plexBtn = (Button) rootView.findViewById(R.id.plexButton);
 		plexBtn.setOnClickListener(this);
 
+        Button plexHtBtn = (Button) rootView.findViewById(R.id.plexHomeTheatreButton);
+        plexHtBtn.setOnClickListener(this);
+
+        Button utorrentBtn = (Button) rootView.findViewById(R.id.utorrentButton);
+        utorrentBtn.setOnClickListener(this);
+
 		Button shutdown = (Button) rootView.findViewById(R.id.shutdown);
 		shutdown.setOnClickListener(this);
 
@@ -50,6 +56,9 @@ public final class PcFragment extends Fragment implements
 
 		Button abort = (Button) rootView.findViewById(R.id.abort);
 		abort.setOnClickListener(this);
+
+        Button sickBeard = (Button) rootView.findViewById(R.id.sickBeard);
+        sickBeard.setOnClickListener(this);
 
 		getActivity().setTitle("New Activity");
 		return rootView;
@@ -121,6 +130,11 @@ public final class PcFragment extends Fragment implements
 	public void plexClick() throws JSONException {
 		SendViaRabbit(CommandTypes.Plex, "");
 	}
+
+    public void sickBeardClick() throws JSONException {
+        SendViaRabbit(CommandTypes.Sickbeard, "");
+    }
+
     public static boolean haveInternet(Context ctx) {
         ConnectivityManager info = ((ConnectivityManager) ctx.getSystemService(Context.CONNECTIVITY_SERVICE));
         NetworkInfo wifi = info.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
@@ -165,14 +179,21 @@ public final class PcFragment extends Fragment implements
 		case R.id.plexButton:
 			plexClick();
 			break;
+            case R.id.plexHomeTheatreButton:
+                plexHTClick();
+                break;
+            case R.id.utorrentButton:
+                utorrentClick();
+                break;
 		case R.id.shutdown:
 			shutdown();
 			break;
 		case R.id.abort:
-		
-				abort();
-		
-			break;
+		    abort();
+		    break;
+            case R.id.sickBeard:
+                sickBeardClick();
+                break;
 
 		}
 		} catch (JSONException e) {
@@ -181,7 +202,15 @@ public final class PcFragment extends Fragment implements
 		}
 	}
 
-	@Override
+    private void plexHTClick() throws JSONException {
+        SendViaRabbit(CommandTypes.PlexHT, "");
+    }
+
+    private void utorrentClick() throws JSONException {
+        SendViaRabbit(CommandTypes.UtorrentStart, "");
+    }
+
+    @Override
 	public boolean onLongClick(View v) {
 		switch (v.getId()) {
 

@@ -33,37 +33,28 @@
                 android:layout_height="wrap_content"
                 style="@style/btnStyleArsenic"
                 android:text="Settings"
-                android:id="@+id/buttonRemoveComplete"
+                android:id="@+id/buttonSettings"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentLeft="true"/>
-
-    </LinearLayout>
-    <LinearLayout
+        <Button
             android:layout_width="wrap_content"
-            android:orientation="horizontal"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left|center_vertical">
+            android:layout_height="fill_parent"
+            style="@style/btnStyleArsenic"
+            android:text="All"
+            android:id="@+id/buttonAll"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true" />
 
         <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/btnStyleArsenic"
-                android:text="All"
-                android:id="@+id/buttonAll"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentLeft="true"
-                />
-
-    <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Active"
             style="@style/btnStyleArsenic"
             android:id="@+id/buttonActive"
             android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"/>
-    </LinearLayout>
+            android:layout_alignParentLeft="true" />
 
+    </LinearLayout>
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                     android:layout_width="match_parent"

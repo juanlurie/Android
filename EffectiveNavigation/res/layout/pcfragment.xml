@@ -25,6 +25,29 @@
         android:layout_height="wrap_content"
         android:text="Plex"
         android:textColor="#FFFFFF" />
+    <Button
+        android:id="@+id/sickBeard"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Sickbeard"
+        android:textColor="#FFFFFF" />
+
+    <Button
+        android:id="@+id/utorrentButton"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Utorrent"
+        android:textColor="#FFFFFF" />
+
+    <Button
+        android:id="@+id/plexHomeTheatreButton"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Plex Home Theatre"
+        android:textColor="#FFFFFF" />
     
       <Button
         android:id="@+id/shutdown"

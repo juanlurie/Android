@@ -68,7 +68,7 @@ public class utorrentSettingsDialog extends DialogFragment implements SeekBar.On
                         try {
 
 
-                            SendJsonCommand(String.valueOf(downloadLimit) + "," + String.valueOf(uploadLimit), 5);
+                            SendJsonCommand(String.valueOf(downloadLimit) + "," + String.valueOf(uploadLimit), 6);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
